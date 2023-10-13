@@ -1,4 +1,4 @@
-// Import the user model for use inside this document.
+// Import the User model for use inside this document.
 const { User } = require("../models");
 
 // The following are async functions. They are being exported to the userRoutes file for express.js.
@@ -16,9 +16,10 @@ module.exports = {
   // Function to return a single user by id
   async getUserById(req, res) {
     try {
-      const user = await User.findById(req.params.userId).select("-__v")
+      const user = await User.findById(req.params.userId)
         .populate("thoughts")
         .populate("friends")
+        .select("-__v")
       if (!user) {
         return res.status(404).json({ message: "No user with that ID" });
       }
