@@ -1,5 +1,5 @@
 // Import the User model for use inside this document.
-const { User } = require("../models");
+const { User, Thought } = require("../models");
 
 // The following are async functions. They are being exported to the userRoutes file for express.js.
 module.exports = {
@@ -64,15 +64,21 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Function to delete a user by id
+  // Function to delete a user by id and its associated thoughts. This function gets the user id, then finds the thoughts within the thoughts array, deletes them and then deletes the user
   async deleteUser(req, res) {
     try {
-      const user = await User.findByIdAndDelete(req.params.userId).select("-__v");
+      const user = await User.findById(req.params.userId).select("-__v");
       if (!user) {
         return res.status(404).json({
           message: "No user with this id",
         });
       }
+      await Thought.deleteMany(
+        { 
+          _id: { $in: user.thoughts }
+        }
+      );
+      await user.deleteOne();
       return res.status(200).json({ message: "User successfully deleted" });
     } catch (err) {
       console.log(err);
