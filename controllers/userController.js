@@ -32,10 +32,10 @@ module.exports = {
   // Function to create a user
   async createUser(req, res) {
     try {
-      const user = await User.create(req.body).select("-__v");
+      const user = await User.create(req.body);
       res.status(200).json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     }
   },
   // Function to update a users details by id
