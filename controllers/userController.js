@@ -3,7 +3,7 @@ const { User } = require("../models");
 
 // The following are async functions. They are being exported to the userRoutes file for express.js.
 module.exports = {
-  // Function to return all existing users in the database
+  // Function to return all users in the database
   async getUsers(req, res) {
     try {
       const users = await User.find().select("-__v");
@@ -13,7 +13,7 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Function to return a single user by id
+  // Function to return a single user by id using the req.params
   async getUserById(req, res) {
     try {
       const user = await User.findById(req.params.userId)
@@ -124,4 +124,6 @@ module.exports = {
       res.status(500).json(err);
     };
   },
+
+  // End of module.exports
 };
